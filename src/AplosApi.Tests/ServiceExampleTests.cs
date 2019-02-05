@@ -120,6 +120,7 @@ namespace AplosApi.Tests
                 Description = "My new purpose created via the Aplos API",
                 IsEnabled = true,
             };
+
             newPurpose.IncomeAccount.AccountNumber = 4000;
             newPurpose.Fund.Id = 173676;
 
@@ -145,6 +146,14 @@ namespace AplosApi.Tests
 
             deletedPurpose.Data.Purpose.Should().BeNull();
             deletedPurpose.Meta.ResourceCount.Should().Be(0);
+        }
+
+        [Fact]
+        public void test_fetching_contributions()
+        {
+            var service = new ContributionsService(_gateway);
+
+            var contributions = service.GetContributions(new ContributionsFilter());
         }
     }
 }
