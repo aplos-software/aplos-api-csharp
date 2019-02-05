@@ -18,7 +18,7 @@ namespace AplosApi.Contract
 
         public class DataModel
         {
-            public List<Contribution> Purposes { get; set; }
+            public List<Contribution> Contributions { get; set; }
         }
 
         public class Contribution
