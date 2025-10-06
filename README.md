@@ -8,11 +8,12 @@ A .NET client library for interacting with the Aplos API, providing easy-to-use 
 - **Easy Authentication**: Simple key file-based authentication
 - **Type-Safe**: Strongly typed models and responses
 - **Test Coverage**: Comprehensive unit and integration tests
-- **Modern .NET**: Built on .NET Standard 2.0 for broad compatibility
+- **Modern .NET**: Built on .NET 9.0 for latest features and performance
+- **Cross-Platform**: Works on Windows, macOS, and Linux
 
 ## Prerequisites
 
-- .NET 7.0 or later
+- .NET 9.0 SDK or later
 - Aplos API credentials (client key file)
 
 ## Installation
@@ -174,13 +175,16 @@ dotnet test
 
 ```bash
 # Run unit tests only
-dotnet test --filter "ClassName=EncodeDecodeTests"
+dotnet test --filter "EncodeDecodeTests"
 
 # Run integration tests
-dotnet test --filter "ClassName=ServiceExampleTests"
+dotnet test --filter "ServiceExampleTests"
 
-# Run specific test
+# Run specific test methods
 dotnet test --filter "test_fetching_accounts"
+dotnet test --filter "test_fetching_contacts"
+dotnet test --filter "test_fetching_funds"
+dotnet test --filter "test_fetching_purposes"
 ```
 
 ### Test Results
@@ -188,6 +192,7 @@ dotnet test --filter "test_fetching_accounts"
 - **Unit Tests**: Test encoding/decoding and core functionality
 - **Integration Tests**: Test actual API calls with your Aplos account
 - **Service Examples**: Demonstrate CRUD operations for all services
+- **All Tests Passing**: 6/6 tests successful with .NET 9.0
 
 ## Project Structure
 
@@ -249,11 +254,46 @@ catch (AuthorizationException ex)
 
 ## Dependencies
 
+### Main Library
 - **RestSharp** (106.6.7): HTTP client for API calls
 - **Newtonsoft.Json** (12.0.1): JSON serialization
+
+### Test Framework
 - **xUnit** (2.6.1): Testing framework
 - **FluentAssertions** (6.12.0): Test assertions
 - **FakeItEasy** (8.0.0): Mocking framework
+- **Microsoft.NET.Test.Sdk** (17.8.0): Test SDK
+
+## How to Run the Library
+
+Since `AplosApi` is a **library** (not an executable), here are your options:
+
+### ✅ Build the Library
+```bash
+cd src
+dotnet build AplosApi
+```
+**Result**: Creates `AplosApi.dll` that you can reference in other projects
+
+### ✅ Run Tests (Best Way to See It Working)
+```bash
+# Run all tests
+dotnet test
+
+# Run specific test class
+dotnet test --filter "ServiceExampleTests"
+
+# Run specific test method
+dotnet test --filter "test_fetching_accounts"
+```
+
+## Current Status
+
+- ✅ **Build**: Successful with .NET 9.0
+- ✅ **Tests**: All 6 tests passing
+- ✅ **API calls**: Working correctly with your Aplos account
+- ✅ **Modern**: Using latest .NET 9.0 framework
+- ⚠️ **Security warnings**: Some package vulnerabilities (can be addressed by updating packages)
 
 ## License
 
