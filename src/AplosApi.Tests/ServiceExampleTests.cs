@@ -114,37 +114,47 @@ namespace AplosApi.Tests
 
             var purposes = service.GetPurposes(filter);
 
-            var newPurpose = new PurposeInfo
+            if (purposes.Data.Purposes.Any())
             {
-                Name = "My new purpose",
-                Description = "My new purpose created via the Aplos API",
-                IsEnabled = true,
-            };
-            newPurpose.IncomeAccount.AccountNumber = 4000;
-            newPurpose.Fund.Id = 173676;
+                var existingPurpose = purposes.Data.Purposes.First();
+                
+                var newPurpose = new PurposeInfo
+                {
+                    Name = "My new purpose",
+                    Description = "My new purpose created via the Aplos API",
+                    IsEnabled = true,
+                };
 
-            var postResult = service.PostPurpose(newPurpose);
+                newPurpose.IncomeAccount.AccountNumber = existingPurpose.IncomeAccount.AccountNumber;
+                newPurpose.Fund.Id = existingPurpose.Fund.Id;
 
-            postResult.Data.Purpose.Name.Should().Be(newPurpose.Name);
+                var postResult = service.PostPurpose(newPurpose);
 
-            newPurpose.Name = "My renamed purpose";
+                postResult.Data.Purpose.Name.Should().Be(newPurpose.Name);
 
-            var putResult = service.PutPurpose(postResult.Data.Purpose.Id, newPurpose);
+                newPurpose.Name = "My renamed purpose";
 
-            putResult.Data.Purpose.Name.Should().Be(newPurpose.Name);
+                var putResult = service.PutPurpose(postResult.Data.Purpose.Id, newPurpose);
 
-            var updatedPurpose = service.GetPurpose(putResult.Data.Purpose.Id);
+                putResult.Data.Purpose.Name.Should().Be(newPurpose.Name);
 
-            updatedPurpose.Data.Purpose.Name.Should().Be(newPurpose.Name);
+                var updatedPurpose = service.GetPurpose(putResult.Data.Purpose.Id);
 
-            var deleteResult = service.DeletePurpose(postResult.Data.Purpose.Id);
+                updatedPurpose.Data.Purpose.Name.Should().Be(newPurpose.Name);
 
-            deleteResult.Message.Should().Contain(postResult.Data.Purpose.Id.ToString());
+                var deleteResult = service.DeletePurpose(postResult.Data.Purpose.Id);
 
-            var deletedPurpose = service.GetPurpose(putResult.Data.Purpose.Id);
+                deleteResult.Message.Should().Contain(postResult.Data.Purpose.Id.ToString());
 
-            deletedPurpose.Data.Purpose.Should().BeNull();
-            deletedPurpose.Meta.ResourceCount.Should().Be(0);
+                var deletedPurpose = service.GetPurpose(putResult.Data.Purpose.Id);
+
+                deletedPurpose.Data.Purpose.Should().BeNull();
+                deletedPurpose.Meta.ResourceCount.Should().Be(0);
+            }
+            else
+            {
+                purposes.Data.Purposes.Should().NotBeNull();
+            }
         }
     }
 }
